@@ -2,7 +2,7 @@ import pool from "@/lib/db";
 import type { RowDataPacket } from "mysql2/promise";
 
 export type CatalogProduct = {
-  id: number;
+  id: number | string;
   image: string;
   name: string;
   category: string;
@@ -13,7 +13,7 @@ export async function fetchActiveProducts(): Promise<CatalogProduct[]> {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.query(
-      "SELECT id, image_path, name, category FROM products WHERE is_active = 1 ORDER BY sort_order ASC, id ASC"
+      "SELECT id, image_path, name, category FROM products WHERE COALESCE(is_active, 1) = 1 ORDER BY sort_order ASC, id ASC"
     );
     const list = rows as RowDataPacket[];
     return list.map((p) => ({
