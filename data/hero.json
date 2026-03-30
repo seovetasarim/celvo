@@ -1,0 +1,35 @@
+{
+  "badge": "Premium Tekstil Koleksiyonu",
+  "title": "Lüks ve Zarafet Evinizde",
+  "description": "Celvo ile yaşam alanlarınızı premium tekstil ürünleriyle dönüştürün. En kaliteli kumaşlar, zarif tasarımlar ve kusursuz işçilik.",
+  "features": [
+    {
+      "icon": "star",
+      "text": "Premium Kalite"
+    },
+    {
+      "icon": "sparkles",
+      "text": "Şık Tasarım"
+    },
+    {
+      "icon": "shopping-bag",
+      "text": "Hızlı Teslimat"
+    }
+  ],
+  "trustIndicators": {
+    "customers": "1000+",
+    "customersLabel": "Mutlu Müşteri",
+    "quality": "%100",
+    "qualityLabel": "Kalite Garantisi"
+  }
+}
+
+
+
+
+
+
+
+
+
+

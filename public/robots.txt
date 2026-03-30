@@ -1,0 +1,21 @@
+# cihatsoft.com - Web Tasarım & SEO
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://cihatsoft.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
