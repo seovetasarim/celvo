@@ -1,34 +1,3 @@
 {
-  "products": [
-    {
-      "id": 1,
-      "image": "/images/1.jpeg",
-      "name": "Premium Koleksiyon 1",
-      "category": "Tekstil"
-    },
-    {
-      "id": 2,
-      "image": "/images/2.jpeg",
-      "name": "Premium Koleksiyon 2",
-      "category": "Tekstil"
-    },
-    {
-      "id": 3,
-      "image": "/images/3.jpeg",
-      "name": "Premium Koleksiyon 3",
-      "category": "Tekstil"
-    },
-    {
-      "id": 4,
-      "image": "/images/4.jpeg",
-      "name": "Premium Koleksiyon 4",
-      "category": "Tekstil"
-    },
-    {
-      "id": 5,
-      "image": "/images/islerimiz/urun_1768669519704.jpg",
-      "name": "Yeni Ürün",
-      "category": "Tekstil"
-    }
-  ]
+  "products": []
 }

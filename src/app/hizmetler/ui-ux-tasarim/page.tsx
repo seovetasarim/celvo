@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Palette, Sparkles, ArrowUpRight, CheckCircle2, ChevronDown, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Script from "next/script";
@@ -268,15 +269,17 @@ export default function UIUXTasarimPage() {
               transition={{ delay: 0.6 }}
               className="flex flex-wrap items-center justify-center gap-4"
             >
-              <Link
-                href="/teklif-al"
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-10 py-4 text-base font-bold text-white shadow-2xl shadow-purple-500/50 transition-all hover:scale-105 hover:shadow-purple-500/70"
               >
                 <span className="flex items-center gap-2">
                   Tasarım Teklifi Alın
                   <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </span>
-              </Link>
+              </a>
               <Link
                 href="/projeler"
                 className="rounded-full border-2 border-white/20 bg-white/5 px-10 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
@@ -539,8 +542,10 @@ export default function UIUXTasarimPage() {
                       ))}
                     </ul>
 
-                    <Link
-                      href="/teklif-al"
+                    <a
+                      href={whatsappHref()}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className={`block w-full rounded-xl py-4 text-center text-sm font-bold transition-all ${
                         pkg.popular
                           ? "bg-gradient-to-r from-[#d4af37] to-[#f0d882] text-black shadow-lg shadow-[#d4af37]/50 hover:scale-105"
@@ -548,7 +553,7 @@ export default function UIUXTasarimPage() {
                       }`}
                     >
                       {pkg.popular ? "🚀 Şimdi Başla" : "Paketi Seç"}
-                    </Link>
+                    </a>
                   </div>
                 </motion.div>
               ))}
@@ -638,13 +643,15 @@ export default function UIUXTasarimPage() {
               </p>
 
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/teklif-al"
+                <a
+                  href={whatsappHref()}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-purple-500/50 transition-all hover:scale-105"
                 >
                   <span>Projenize Başlayın</span>
                   <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </Link>
+                </a>
 
                 <a
                   href="tel:+905321667697"

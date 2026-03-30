@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ExternalLink, Sparkles, ArrowUpRight, Calendar, Target } from "lucide-react";
-import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -446,13 +446,15 @@ export default function ProjelerPage() {
                 Web tasarım ve SEO projesi için ücretsiz teklif alın, birlikte harika işler çıkaralım.
               </p>
 
-              <Link
-                href="/teklif-al"
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-10 py-5 text-lg font-bold text-black shadow-2xl shadow-[#d4af37]/50 transition-all hover:scale-105 hover:shadow-[#d4af37]/70"
               >
                 <span>Projenize Başlayın</span>
                 <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </Link>
+              </a>
             </motion.div>
           </div>
         </section>

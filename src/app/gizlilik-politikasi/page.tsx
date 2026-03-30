@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, Database, UserCheck, FileText, Mail, Download, Calendar } from "lucide-react";
 import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Script from "next/script";
@@ -476,12 +477,14 @@ export default function GizlilikPolitikasiPage() {
               >
                 <span className="text-sm font-semibold text-white">Hakkımızda</span>
               </Link>
-              <Link
-                href="/teklif-al"
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group rounded-xl border border-white/10 bg-white/5 p-6 text-center transition-all hover:border-white/30 hover:bg-white/10"
               >
                 <span className="text-sm font-semibold text-white">Teklif Al</span>
-              </Link>
+              </a>
               <Link
                 href="/#hizmetler"
                 className="group rounded-xl border border-white/10 bg-white/5 p-6 text-center transition-all hover:border-white/30 hover:bg-white/10"

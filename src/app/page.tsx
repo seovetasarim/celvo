@@ -2,31 +2,33 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
 import HomeCatalog from "@/components/HomeCatalog";
+import { getSiteUrl } from "@/lib/site";
 import Script from "next/script";
 
 export default function Home() {
+  const base = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "http://celvo.com.tr/#website",
-        url: "http://celvo.com.tr",
+        "@id": `${base}/#website`,
+        url: base,
         name: "Celvo - Premium Tekstil Ürünleri",
         description: "Celvo kaliteli ve şık tekstil ürünleriyle yaşam alanlarınıza değer katıyor",
         publisher: {
-          "@id": "http://celvo.com.tr/#organization",
+          "@id": `${base}/#organization`,
         },
         inLanguage: "tr-TR",
       },
       {
         "@type": "Organization",
-        "@id": "http://celvo.com.tr/#organization",
+        "@id": `${base}/#organization`,
         name: "Celvo Tekstil",
-        url: "http://celvo.com.tr",
+        url: base,
         logo: {
           "@type": "ImageObject",
-          url: "http://celvo.com.tr/logo.jpg",
+          url: `${base}/logo.jpg`,
         },
         description: "Premium tekstil ürünleri ve şık ev tekstili",
         address: {
@@ -50,14 +52,14 @@ export default function Home() {
       },
       {
         "@type": "WebPage",
-        "@id": "http://celvo.com.tr/#webpage",
-        url: "http://celvo.com.tr",
+        "@id": `${base}/#webpage`,
+        url: base,
         name: "Celvo - Premium Tekstil Ürünleri",
         isPartOf: {
-          "@id": "http://celvo.com.tr/#website",
+          "@id": `${base}/#website`,
         },
         about: {
-          "@id": "http://celvo.com.tr/#organization",
+          "@id": `${base}/#organization`,
         },
         description: "Kaliteli tekstil ürünleri, ev tekstili ve şık tasarımlar",
         inLanguage: "tr-TR",

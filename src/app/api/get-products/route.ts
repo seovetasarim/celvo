@@ -1,29 +1,13 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { fetchActiveProducts } from "@/lib/productsQuery";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), "data", "products.json");
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to load products data" },
-      { status: 500 }
-    );
+    const products = await fetchActiveProducts();
+    return NextResponse.json({ products });
+  } catch {
+    return NextResponse.json({ error: "Failed to load products" }, { status: 500 });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

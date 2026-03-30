@@ -1,7 +1,7 @@
 "use client";
 
 import { Code2, Palette, Rocket, Search, Zap, Globe, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -271,13 +271,15 @@ export default function Services() {
           <p className="mb-8 text-lg text-gray-400">
             Need something custom? Let's build it together.
           </p>
-          <Link
-            href="/teklif-al"
+          <a
+            href={whatsappHref()}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-10 py-5 text-lg font-bold text-black shadow-2xl shadow-[#d4af37]/50 transition-all hover:scale-105 hover:shadow-[#d4af37]/70"
           >
             <span>Let's Talk About Your Project</span>
             <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-          </Link>
+          </a>
         </motion.div>
       </div>
     </section>

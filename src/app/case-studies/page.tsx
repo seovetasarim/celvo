@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, ArrowUpRight, TrendingUp, Target, CheckCircle2, BarChart3, ShoppingCart, Users, Zap } from "lucide-react";
-import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Script from "next/script";
@@ -383,13 +383,15 @@ export default function CaseStudiesPage() {
               </p>
 
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/teklif-al"
+                <a
+                  href={whatsappHref()}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-10 py-5 text-lg font-bold text-black shadow-2xl shadow-[#d4af37]/50 transition-all hover:scale-105"
                 >
                   <span>Projenize Başlayın</span>
                   <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </Link>
+                </a>
 
                 <a
                   href="tel:+905321667697"

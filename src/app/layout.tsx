@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
+
+const siteUrl = getSiteUrl();
 
 const poppins = Poppins({
   variable: "--font-sans",
@@ -9,13 +12,16 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const siteTitle = "CELVO | Premium Tekstil & Modern Tasarım";
+const siteDescription =
+  "Modern kadının stilini üretim sanatı ile buluşturuyoruz. Yüksek kaliteli kumaşlar ve zamansız kesimlerle hazırlanan CELVO koleksiyonlarını keşfedin. Sessizliğin gücü, kalitenin imzası.";
+
 export const metadata: Metadata = {
   title: {
-    default: "Celvo - Premium Tekstil Ürünleri | Şık ve Kaliteli Ev Tekstili",
-    template: "%s | Celvo",
+    default: siteTitle,
+    template: "%s | CELVO",
   },
-  description:
-    "Celvo ile yaşam alanlarınızı premium tekstil ürünleriyle süsleyin. Kaliteli kumaşlar, şık tasarımlar ve modern ev tekstili ürünleri.",
+  description: siteDescription,
   keywords: [
     "celvo",
     "tekstil",
@@ -27,7 +33,7 @@ export const metadata: Metadata = {
     "tekstil ürünleri",
     "modern tekstil",
   ],
-  metadataBase: new URL("http://celvo.com.tr"),
+  metadataBase: new URL(siteUrl),
   authors: [{ name: "Yusuf Tutar - Celvo Tekstil" }],
   creator: "Celvo - Yusuf Tutar",
   publisher: "Celvo",
@@ -41,12 +47,11 @@ export const metadata: Metadata = {
     apple: "/images/logo.png",
   },
   openGraph: {
-    title: "Celvo - Premium Tekstil Ürünleri",
-    description:
-      "Kaliteli ve şık tekstil ürünleriyle yaşam alanlarınıza değer katın.",
+    title: siteTitle,
+    description: siteDescription,
     type: "website",
     locale: "tr_TR",
-    url: "http://celvo.com.tr",
+    url: siteUrl,
     siteName: "Celvo",
     images: [
       {
@@ -59,9 +64,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Celvo - Premium Tekstil Ürünleri",
-    description:
-      "Kaliteli ve şık tekstil ürünleriyle yaşam alanlarınıza değer katın.",
+    title: siteTitle,
+    description: siteDescription,
     images: ["/logo.jpg"],
   },
   robots: {
@@ -76,7 +80,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "http://celvo.com.tr",
+    canonical: siteUrl,
   },
 };
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { whatsappHref } from "@/lib/whatsapp";
 
 type Product = {
   id: number | string;
@@ -11,13 +12,12 @@ type Product = {
   category?: string;
 };
 
-const WHATSAPP_NUMBER = "905067000827";
-
 const HERO_IMAGE_URL =
   "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=80";
 
 export default function HomeCatalog() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch("/api/urunler")
@@ -31,9 +31,13 @@ export default function HomeCatalog() {
       });
   }, []);
 
-  const visibleProducts = useMemo(() => {
+  useEffect(() => {
+    if (products.length === 0) {
+      setVisibleProducts([]);
+      return;
+    }
     const shuffled = [...products].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 12);
+    setVisibleProducts(shuffled.slice(0, 12));
   }, [products]);
 
   return (
@@ -83,7 +87,8 @@ export default function HomeCatalog() {
 
         {visibleProducts.length === 0 && (
           <div className="mb-10 rounded-2xl border border-dashed border-stone-300 p-6 text-center text-sm text-stone-600">
-            `public/urun` klasörüne 12 ürün görseli eklediğinde burada otomatik listelenecek.
+            Henüz listelenecek ürün yok. Ürünleri admin panelden ekleyin; anasayfa ve panel aynı veritabanındaki ürünleri
+            kullanır.
           </div>
         )}
 
@@ -95,34 +100,33 @@ export default function HomeCatalog() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {visibleProducts.map((product) => {
             const productName = product.name || "Ürün";
-            const quoteUrl = `/teklif-al?urun=${encodeURIComponent(productName)}`;
-            const whatsappText = encodeURIComponent(`Merhaba, ${productName} ürünü için fiyat teklifi almak istiyorum.`);
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}`;
+            const whatsappUrl = whatsappHref(
+              `Merhaba, ${productName} ürünü için fiyat teklifi almak istiyorum.`,
+            );
 
             return (
               <article key={product.id} className="overflow-hidden rounded-xl border border-stone-300">
                 <div className="relative aspect-[4/5] w-full bg-stone-100">
-                  <Image src={product.image || "/images/demo.jpg"} alt={productName} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                  <Image
+                    src={product.image || "/images/demo.jpg"}
+                    alt={productName}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    unoptimized={String(product.image || "").startsWith("data:")}
+                  />
                 </div>
                 <div className="p-3">
                   <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">{product.category || "Tekstil"}</p>
                   <h3 className="mb-3 text-sm font-semibold text-stone-900">{productName}</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link
-                      href={quoteUrl}
-                      className="inline-flex items-center justify-center rounded-md border border-stone-900 px-2 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-900 hover:text-white"
-                    >
-                      Teklif Al
-                    </Link>
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-md border border-green-600 px-2 py-2 text-xs font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
-                    >
-                      WhatsApp
-                    </a>
-                  </div>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center rounded-md border border-green-600 px-2 py-2 text-xs font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+                  >
+                    Teklif Al
+                  </a>
                 </div>
               </article>
             );

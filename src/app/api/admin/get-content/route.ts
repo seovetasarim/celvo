@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
+import { fetchActiveProducts } from "@/lib/productsQuery";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -20,6 +21,16 @@ export async function GET(request: Request) {
 
   if (!type) {
     return NextResponse.json({ error: "Type is required" }, { status: 400 });
+  }
+
+  if (type === "products") {
+    try {
+      const products = await fetchActiveProducts();
+      return NextResponse.json({ products });
+    } catch (error) {
+      console.error("DB Error (products):", error);
+      return NextResponse.json({ products: [] });
+    }
   }
 
   try {
@@ -77,24 +88,6 @@ export async function GET(request: Request) {
           icon: v.icon,
           title: v.title,
           description: v.description,
-        })),
-      };
-    } else if (type === "products") {
-      const [rows] = await connection.query(
-        "SELECT * FROM products WHERE is_active = 1 ORDER BY sort_order"
-      );
-      const products = rows as any[];
-      if (!products || products.length === 0) {
-        connection.release();
-        const jsonData = await getFromJsonFile("products");
-        return NextResponse.json(jsonData || { products: [] });
-      }
-      data = {
-        products: products.map((p) => ({
-          id: p.id,
-          image: p.image_path,
-          name: p.name,
-          category: p.category,
         })),
       };
     } else if (type === "contact") {
