@@ -151,23 +151,23 @@ export default function Footer() {
 
         <div className="mb-8 h-px w-full bg-stone-200" />
 
-        <div className="space-y-4 text-center">
-          <p className="text-sm text-stone-500">
+        <div className="flex items-center justify-between gap-4 text-sm text-stone-500">
+          <p className="whitespace-nowrap text-left">
             © {new Date().getFullYear()}{" "}
             <span className="font-semibold text-stone-700">CÉLVO</span> - Yusuf Tutar
             <span className="mx-2">•</span>
             Tüm hakları saklıdır.
           </p>
 
-          <div className="flex items-center justify-center gap-2 text-xs text-stone-500">
+          <div className="flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-stone-500">
             <span>Designed & Developed by</span>
             <a
-              href="https://www.dijitalwebsite.com/"
+              href="https://www.webtasarimseo.com"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-[#b08a20] transition-colors hover:text-[#8f6f16]"
             >
-              Dijital Website
+              Web Tasarım Seo
             </a>
           </div>
         </div>

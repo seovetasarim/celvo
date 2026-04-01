@@ -58,13 +58,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-6">
-      {/* Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#d4af37]/10 via-black to-black" />
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d4af37]/5 blur-[150px]" />
-      </div>
-
+    <div className="flex min-h-screen items-center justify-center bg-white px-6 py-10">
       {/* Login Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -72,16 +66,16 @@ export default function AdminPage() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md"
       >
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-black/80 backdrop-blur-xl">
+        <div className="overflow-hidden rounded-2xl border border-stone-300 bg-white shadow-sm">
           {/* Header */}
-          <div className="border-b border-white/10 bg-gradient-to-r from-[#d4af37]/10 to-transparent p-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-[#d4af37]/20 to-transparent">
-              <Lock className="h-8 w-8 text-[#d4af37]" />
+          <div className="border-b border-stone-200 p-8 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg border border-stone-200 bg-stone-50">
+              <Lock className="h-7 w-7 text-stone-700" />
             </div>
-            <h1 className="mb-2 text-2xl font-bold text-white">
+            <h1 className="mb-2 text-2xl font-semibold text-stone-900">
               Admin Paneli
             </h1>
-            <p className="text-sm text-gray-400">CÉLVO İçerik Yönetimi</p>
+            <p className="text-sm text-stone-500">CÉLVO İçerik Yönetimi</p>
           </div>
 
           {/* Form */}
@@ -89,7 +83,7 @@ export default function AdminPage() {
             <div className="space-y-6">
               {/* Username */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-stone-700">
                   Kullanıcı Adı
                 </label>
                 <input
@@ -97,14 +91,14 @@ export default function AdminPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-[#d4af37]/50 focus:bg-white/10"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-stone-900 placeholder-stone-400 outline-none transition-all focus:border-stone-500"
                   placeholder="admin"
                 />
               </div>
 
               {/* Password */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-stone-700">
                   Şifre
                 </label>
                 <div className="relative">
@@ -113,13 +107,13 @@ export default function AdminPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-white placeholder-gray-500 outline-none transition-all focus:border-[#d4af37]/50 focus:bg-white/10"
+                    className="w-full rounded-lg border border-stone-300 bg-white px-4 py-3 pr-12 text-stone-900 placeholder-stone-400 outline-none transition-all focus:border-stone-500"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -147,7 +141,7 @@ export default function AdminPage() {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="w-full rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-8 py-4 text-base font-semibold text-black shadow-lg shadow-[#d4af37]/30 transition-all hover:shadow-xl hover:shadow-[#d4af37]/50 disabled:opacity-50"
+                className="w-full rounded-lg border border-stone-900 bg-stone-900 px-8 py-3.5 text-base font-medium text-white transition-all hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
               </motion.button>
@@ -156,7 +150,7 @@ export default function AdminPage() {
         </div>
 
         {/* Info */}
-        <p className="mt-6 text-center text-xs text-gray-600">
+        <p className="mt-5 text-center text-xs text-stone-500">
           Yetkisiz erişim yasaktır
         </p>
       </motion.div>

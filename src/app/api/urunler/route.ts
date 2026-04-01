@@ -9,7 +9,7 @@ import {
 export const dynamic = "force-dynamic";
 
 /**
- * Öncelik: MySQL → public/urun1…urun12 → diğer public görseller → data/products.json
+ * Öncelik: MySQL → data/products.json → public/urun1…urun12 → diğer public görseller
  */
 export async function GET() {
   let products: Awaited<ReturnType<typeof fetchActiveProducts>> = [];
@@ -21,13 +21,13 @@ export async function GET() {
   }
 
   if (products.length === 0) {
+    products = await loadCatalogFromJsonFile();
+  }
+  if (products.length === 0) {
     products = await loadUrun1To12FromPublic();
   }
   if (products.length === 0) {
     products = await loadCatalogFromPublicFolder();
-  }
-  if (products.length === 0) {
-    products = await loadCatalogFromJsonFile();
   }
 
   return NextResponse.json({ products });

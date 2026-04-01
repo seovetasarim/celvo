@@ -1,3 +1,76 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": "urun-1",
+      "image": "/urun1.jpeg",
+      "name": "ffff",
+      "category": "asdasdsa"
+    },
+    {
+      "id": "urun-2",
+      "image": "/urun2.jpeg",
+      "name": "1111",
+      "category": "1221"
+    },
+    {
+      "id": "urun-3",
+      "image": "/urun3.jpeg",
+      "name": "123123",
+      "category": "123"
+    },
+    {
+      "id": "urun-4",
+      "image": "/urun4.jpeg",
+      "name": "Koleksiyon 4",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-5",
+      "image": "/urun5.jpeg",
+      "name": "Koleksiyon 5",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-6",
+      "image": "/urun6.jpeg",
+      "name": "Koleksiyon 6",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-7",
+      "image": "/urun7.jpeg",
+      "name": "Koleksiyon 7",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-8",
+      "image": "/urun8.jpeg",
+      "name": "Koleksiyon 8",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-9",
+      "image": "/urun9.jpeg",
+      "name": "Koleksiyon 9",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-10",
+      "image": "/urun10.jpeg",
+      "name": "Koleksiyon 10",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-11",
+      "image": "/urun11.jpeg",
+      "name": "Koleksiyon 11",
+      "category": "CELVO Woman"
+    },
+    {
+      "id": "urun-12",
+      "image": "/urun12.jpeg",
+      "name": "Koleksiyon 12",
+      "category": "CELVO Woman"
+    }
+  ]
 }

@@ -12,12 +12,25 @@ type Product = {
   category?: string;
 };
 
+type HeroData = {
+  badge?: string;
+  title?: string;
+  description?: string;
+};
+
 const HERO_IMAGE_URL =
   "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=80";
+
+const DEFAULT_HERO: HeroData = {
+  badge: "CELVO Woman",
+  title: "Sessizliğin Gücü, Tasarımın Zarafeti.",
+  description: "CELVO Woman | Estetiği ve kaliteyi üretimle buluşturan modern kadının yeni imzası.",
+};
 
 export default function HomeCatalog() {
   const [products, setProducts] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
+  const [hero, setHero] = useState<HeroData>(DEFAULT_HERO);
 
   useEffect(() => {
     fetch("/api/urunler")
@@ -28,6 +41,20 @@ export default function HomeCatalog() {
       })
       .catch(() => {
         setProducts([]);
+      });
+
+    fetch("/api/admin/get-content?type=hero")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data || data.error) return;
+        setHero({
+          badge: data.badge || DEFAULT_HERO.badge,
+          title: data.title || DEFAULT_HERO.title,
+          description: data.description || DEFAULT_HERO.description,
+        });
+      })
+      .catch(() => {
+        setHero(DEFAULT_HERO);
       });
   }, []);
 
@@ -55,13 +82,13 @@ export default function HomeCatalog() {
             <div className="absolute inset-0 flex items-end p-4 sm:p-6 md:p-8">
               <div className="max-w-xl text-white">
                 <p className="mb-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/80 sm:text-xs">
-                  CELVO Woman
+                  {hero.badge}
                 </p>
                 <h1 className="text-lg font-semibold leading-tight sm:text-2xl md:text-4xl">
-                  Sessizliğin Gücü, Tasarımın Zarafeti.
+                  {hero.title}
                 </h1>
                 <p className="mt-2 max-w-md text-[11px] text-white/85 sm:text-sm md:text-base">
-                  CELVO Woman | Estetiği ve kaliteyi üretimle buluşturan modern kadının yeni imzası.
+                  {hero.description}
                 </p>
                 <p className="mt-1 text-[11px] font-medium italic text-white/90 sm:text-sm">
                   Rise in Silence.

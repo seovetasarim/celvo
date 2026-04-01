@@ -1,8 +1,87 @@
+ "use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
+import { useEffect, useState } from "react";
+
+type AboutValue = {
+  icon?: string;
+  title: string;
+  description: string;
+};
+
+type AboutData = {
+  title: string;
+  slogan?: string;
+  brandName?: string;
+  origin: {
+    title: string;
+    content: string;
+  };
+  philosophy: {
+    title: string;
+    paragraphs: string[];
+  };
+  target: {
+    title: string;
+    content: string;
+    subtitle?: string;
+  };
+  values: AboutValue[];
+};
+
+const defaultAbout: AboutData = {
+  title: "Köklerden Zirveye: Başarıya Giden Sessiz Güç",
+  slogan: "Rise in Silence.",
+  brandName: "CÉLVO",
+  origin: {
+    title: "Köken ve Anlam",
+    content:
+      "CÉLVO, Latince iki güçlü kavramın birleşimiyle doğmuştur: \"Celare\" (gizlemek, örtmek) ve \"Volare\" (yükselmek, uçmak). Bu birleşimden çıkan anlam: \"Sessizce yükselmek.\"",
+  },
+  philosophy: {
+    title: "Markanın Felsefesi",
+    paragraphs: [
+      "CÉLVO, yaşamın temel direklerinden ilham alır; gösterişten, anlık parıltılardan ve yüzeysel gürültüden uzaktır.",
+      "Bu, fırtınalı bir denizde bile sakinliğini koruyan, ancak her an yükselmeye hazır olan gizli bir gücün manifestosudur.",
+    ],
+  },
+  target: {
+    title: "CÉLVO Erkeği",
+    content:
+      "CÉLVO'yu tercih eden erkek, sözlerin geçici, duruşun kalıcı olduğunu bilir. O, kendini kanıtlama çabasına girmez.",
+    subtitle: "Onun gücü, derinlikten ve gizli bir vizyondan gelir.",
+  },
+  values: [],
+};
 
 export default function HakkimizdaPage() {
+  const [aboutData, setAboutData] = useState<AboutData>(defaultAbout);
+
+  useEffect(() => {
+    fetch("/api/admin/get-content?type=about")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data || data.error) return;
+        setAboutData({
+          ...defaultAbout,
+          ...data,
+          origin: { ...defaultAbout.origin, ...(data.origin || {}) },
+          philosophy: {
+            ...defaultAbout.philosophy,
+            ...(data.philosophy || {}),
+            paragraphs: Array.isArray(data?.philosophy?.paragraphs)
+              ? data.philosophy.paragraphs
+              : defaultAbout.philosophy.paragraphs,
+          },
+          target: { ...defaultAbout.target, ...(data.target || {}) },
+          values: Array.isArray(data.values) ? data.values : defaultAbout.values,
+        });
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="bg-white">
       <Header />
@@ -11,53 +90,55 @@ export default function HakkimizdaPage() {
           <div className="mb-10 border-b border-stone-300 pb-5">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-stone-500">Hakkımızda (Hikayemiz)</p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl">
-              CELVO: Zarafetin Sessiz Yükselişi
+              {aboutData.title}
             </h1>
           </div>
 
           <article className="rounded-2xl border border-stone-300 p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">{aboutData.origin.title}</h2>
             <p className="text-sm leading-relaxed text-stone-700 sm:text-base">
-              Markanın kökenini ve Gaziantep’ten dünyaya açılan vizyonunu vurgular.
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-stone-700 sm:text-base">
-              2025 yılında temelleri atılan CELVO, kadın giyiminde "sessiz lüks" anlayışını üretim sanatı ile
-              birleştiriyor. Bizim için her dikiş bir hikaye, her kumaş bir karakterdir. Gaziantep’teki üretim
-              merkezimizde, modern kadının hem günlük yaşamda hem de en özel anlarında ihtiyaç duyduğu özgüveni,
-              yüksek kaliteli materyaller ve kusursuz işçilikle sunuyoruz.
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-stone-700 sm:text-base">
-              Gösterişten uzak ama fark edilen, abartıdan kaçınan ama kaliteyi hissettiren bir marka olarak;
-              üretimin her aşamasında mükemmelliği hedefliyoruz.
+              {aboutData.origin.content}
             </p>
           </article>
 
           <article className="mt-6 rounded-2xl border border-stone-300 p-6 sm:p-8">
             <h2 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">
-              Kumaştan Tasarıma Kusursuz Süreç
+              {aboutData.philosophy.title}
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-stone-700 sm:text-base">
-              CELVO olarak sadece bir marka değil, aynı zamanda bir üretim gücüyüz. En üst segment kumaşları,
-              ileri teknoloji üretim bandımızla ve usta işçiliğimizle buluşturuyoruz. Kadın giyiminde kalıpların
-              gücüne inanıyor, her bedende mükemmel duruşu hedefleyen bir disiplinle çalışıyoruz.
+              {aboutData.philosophy.paragraphs?.[0] || ""}
             </p>
-            <ul className="mt-5 space-y-2 text-sm text-stone-700 sm:text-base">
-              <li>• Yüksek Kalite Standartları</li>
-              <li>• Sürdürülebilir Üretim Yaklaşımı</li>
-              <li>• Modern ve Özgün Kalıplar</li>
-            </ul>
+            {aboutData.philosophy.paragraphs?.[1] ? (
+              <p className="mt-4 text-sm leading-relaxed text-stone-700 sm:text-base">
+                {aboutData.philosophy.paragraphs[1]}
+              </p>
+            ) : null}
           </article>
 
           <article className="mt-6 rounded-2xl border border-stone-300 p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">Vizyon & Misyon</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">{aboutData.target.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-stone-700 sm:text-base">
-              <span className="font-semibold text-stone-900">Vizyonumuz:</span> Türkiye'den çıkan bir "Quiet Luxury"
-              (Sessiz Lüks) markası olarak, global moda standartlarını üretim kalitemizle yeniden tanımlamak.
+              {aboutData.target.content}
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-stone-700 sm:text-base">
-              <span className="font-semibold text-stone-900">Misyonumuz:</span> Kadın modasında estetik ve konforu
-              birleştirerek, zamansız parçalar üretmek ve tekstil dünyasında kalıcı bir iz bırakmak.
-            </p>
+            {aboutData.target.subtitle ? (
+              <p className="mt-3 text-sm font-semibold leading-relaxed text-stone-900 sm:text-base">
+                {aboutData.target.subtitle}
+              </p>
+            ) : null}
           </article>
+
+          {aboutData.values.length > 0 ? (
+            <article className="mt-6 rounded-2xl border border-stone-300 p-6 sm:p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">Temel Değerler</h2>
+              <ul className="mt-5 space-y-3 text-sm text-stone-700 sm:text-base">
+                {aboutData.values.map((value, index) => (
+                  <li key={`${value.title}-${index}`}>
+                    <span className="font-semibold text-stone-900">{value.title}:</span> {value.description}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ) : null}
         </section>
       </main>
       <Footer />

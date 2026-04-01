@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { fetchActiveProducts } from "@/lib/productsQuery";
+import {
+  loadCatalogFromJsonFile,
+  loadCatalogFromPublicFolder,
+  loadUrun1To12FromPublic,
+} from "@/lib/catalogFallback";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -24,13 +29,24 @@ export async function GET(request: Request) {
   }
 
   if (type === "products") {
+    let products: Awaited<ReturnType<typeof fetchActiveProducts>> = [];
     try {
-      const products = await fetchActiveProducts();
-      return NextResponse.json({ products });
+      products = await fetchActiveProducts();
     } catch (error) {
       console.error("DB Error (products):", error);
-      return NextResponse.json({ products: [] });
     }
+
+    if (products.length === 0) {
+      products = await loadCatalogFromJsonFile();
+    }
+    if (products.length === 0) {
+      products = await loadUrun1To12FromPublic();
+    }
+    if (products.length === 0) {
+      products = await loadCatalogFromPublicFolder();
+    }
+
+    return NextResponse.json({ products });
   }
 
   try {

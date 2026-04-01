@@ -199,24 +199,24 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   if (!heroData || !aboutData || !productsData || !contactData || !settingsData) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
-        <div className="text-[#d4af37]">Yükleniyor...</div>
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div className="text-stone-600">Yükleniyor...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="admin-light min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl">
+      <header className="border-b border-stone-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div>
-            <h1 className="text-xl font-bold text-white">CÉLVO Admin</h1>
-            <p className="text-xs text-gray-500">İçerik Yönetim Paneli</p>
+            <h1 className="text-xl font-semibold text-stone-900">CÉLVO Admin</h1>
+            <p className="text-xs text-stone-500">İçerik Yönetim Paneli</p>
           </div>
           <button
             onClick={onLogout}
-            className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition-all hover:border-red-500/50 hover:bg-red-500/10"
+            className="flex items-center gap-2 rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm text-stone-700 transition-all hover:bg-stone-100"
           >
             <LogOut className="h-4 w-4" />
             Çıkış
@@ -240,8 +240,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 rounded-xl px-6 py-3 font-medium transition-all ${
                 activeTab === tab.id
-                  ? "border border-[#d4af37]/30 bg-[#d4af37]/10 text-[#d4af37]"
-                  : "border border-white/5 bg-white/5 text-gray-400 hover:text-white"
+                  ? "border border-stone-900 bg-stone-900 text-white"
+                  : "border border-stone-300 bg-white text-stone-600 hover:bg-stone-100 hover:text-stone-900"
               }`}
             >
               <tab.icon className="h-4 w-4" />
@@ -255,14 +255,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 rounded-xl border border-[#d4af37]/20 bg-[#d4af37]/10 p-4 text-center text-white"
+            className="mb-6 rounded-xl border border-stone-300 bg-stone-50 p-4 text-center text-stone-700"
           >
             {message}
           </motion.div>
         )}
 
         {/* Content Area */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
+        <div className="rounded-2xl border border-stone-200 bg-white p-8">
           {/* Hero Tab */}
           {activeTab === "hero" && (
             <div className="space-y-6">
@@ -615,6 +615,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <h2 className="mb-6 text-2xl font-bold text-white">
                 Ürün Yönetimi
               </h2>
+              <p className="text-sm text-stone-600">
+                Buradaki değişiklikler anasayfadaki ürün kartlarına direkt yansır. Resim, ürün ismi (başlık) ve kategoriyi düzenleyip kaydedin.
+              </p>
 
               <div className="space-y-4">
                 {productsData.products.map((product: any, index: number) => (
@@ -625,7 +628,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
                         <label className="mb-2 block text-xs text-gray-400">
-                          Ürün Adı
+                          Ürün İsmi (Başlık)
                         </label>
                         <input
                           type="text"
@@ -640,7 +643,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       </div>
                       <div>
                         <label className="mb-2 block text-xs text-gray-400">
-                          Kategori
+                          Kategori / Alt Başlık
                         </label>
                         <input
                           type="text"
@@ -653,6 +656,22 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           className="w-full rounded-lg border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-[#d4af37]/50"
                         />
                       </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <label className="mb-2 block text-xs text-gray-400">
+                        Ürün Resmi (URL veya Base64)
+                      </label>
+                      <input
+                        type="text"
+                        value={product.image}
+                        onChange={(e) => {
+                          const updated = { ...productsData };
+                          updated.products[index].image = e.target.value;
+                          setProductsData(updated);
+                        }}
+                        className="w-full rounded-lg border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-[#d4af37]/50"
+                      />
                     </div>
 
                     {/* Product Image Preview */}
@@ -1019,6 +1038,43 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           )}
         </div>
       </div>
+      <style jsx global>{`
+        .admin-light [class*="border-white/10"],
+        .admin-light [class*="border-white/5"] {
+          border-color: #e7e5e4 !important;
+        }
+
+        .admin-light [class*="bg-white/5"],
+        .admin-light [class*="bg-black/20"],
+        .admin-light [class*="bg-black/40"],
+        .admin-light [class*="bg-black/60"] {
+          background-color: #ffffff !important;
+        }
+
+        .admin-light input,
+        .admin-light textarea {
+          background-color: #ffffff !important;
+          border-color: #d6d3d1 !important;
+          color: #1c1917 !important;
+        }
+
+        .admin-light input::placeholder,
+        .admin-light textarea::placeholder {
+          color: #a8a29e !important;
+        }
+
+        .admin-light label,
+        .admin-light h2,
+        .admin-light h3 {
+          color: #1f2937 !important;
+        }
+
+        .admin-light [class*="text-gray-300"],
+        .admin-light [class*="text-gray-400"],
+        .admin-light [class*="text-gray-500"] {
+          color: #57534e !important;
+        }
+      `}</style>
     </div>
   );
 }
