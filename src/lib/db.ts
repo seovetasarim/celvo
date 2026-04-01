@@ -7,8 +7,7 @@ const remoteHost = host !== "localhost" && host !== "127.0.0.1";
 
 const useSsl =
   process.env.DB_SSL === "true" ||
-  process.env.DB_SSL === "1" ||
-  (isVercel && remoteHost);
+  process.env.DB_SSL === "1";
 
 const pool = mysql.createPool({
   host,
