@@ -61,7 +61,21 @@ export async function POST(request: Request) {
           connection.release();
         }
       } catch (dbError) {
+        const dbMessage =
+          dbError instanceof Error ? dbError.message : "Unknown database error";
         console.error("Products DB save failed, using JSON fallback:", dbError);
+
+        if (process.env.VERCEL === "1") {
+          return NextResponse.json(
+            {
+              error:
+                "Canli ortamda veritabanina baglanilamadigi icin kayit yapilamadi. Vercel DB_ degiskenleri, DB_SSL ve MySQL Remote Access izinlerini kontrol edin. Teknik detay: " +
+                dbMessage,
+            },
+            { status: 500 }
+          );
+        }
+
         await saveProductsToJson(Array.isArray(data.products) ? data.products : []);
         return NextResponse.json({
           success: true,

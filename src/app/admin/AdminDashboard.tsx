@@ -76,6 +76,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type, data }),
       });
+      const payload = await response.json().catch(() => null);
 
       if (response.ok) {
         setMessage("✅ Kaydedildi! Sayfa yeniden yüklenecek...");
@@ -83,10 +84,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           window.location.reload();
         }, 1500);
       } else {
-        setMessage("❌ Kaydetme hatası");
+        const reason =
+          payload?.error ||
+          payload?.message ||
+          `Kaydetme hatası (HTTP ${response.status})`;
+        setMessage(`❌ ${reason}`);
       }
     } catch (error) {
-      setMessage("❌ Kaydetme hatası");
+      setMessage("❌ Kaydetme hatası: " + (error as Error).message);
     } finally {
       setLoading(false);
     }
