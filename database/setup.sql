@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS hero_content (
   badge VARCHAR(255) NOT NULL,
   title VARCHAR(500) NOT NULL,
   description TEXT NOT NULL,
-  trust_customers VARCHAR(50),
-  trust_customers_label VARCHAR(100),
-  trust_quality VARCHAR(50),
-  trust_quality_label VARCHAR(100),
+  trust_customers VARCHAR(500),
+  trust_customers_label VARCHAR(500),
+  trust_quality VARCHAR(500),
+  trust_quality_label VARCHAR(500),
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 

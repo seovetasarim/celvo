@@ -12,7 +12,7 @@ const poppins = Poppins({
   display: "swap",
 });
 
-const siteTitle = "CELVO | Premium Tekstil & Modern Tasarım";
+const siteTitle = "CELVO | Bayan Giyim Üretimi & Tasarım";
 const siteDescription =
   "Modern kadının stilini üretim sanatı ile buluşturuyoruz. Yüksek kaliteli kumaşlar ve zamansız kesimlerle hazırlanan CELVO koleksiyonlarını keşfedin. Sessizliğin gücü, kalitenin imzası.";
 
