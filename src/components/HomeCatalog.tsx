@@ -133,7 +133,7 @@ export default function HomeCatalog() {
             const detailHref = `/urun/${encodeURIComponent(String(product.id))}`;
 
             return (
-              <article key={product.id} className="overflow-hidden rounded-xl border border-stone-300">
+              <article key={product.id} className="flex h-full flex-col overflow-hidden rounded-xl border border-stone-300">
                 <Link href={detailHref} className="block">
                   <div className="relative aspect-[4/5] w-full bg-stone-100">
                     <Image
@@ -146,16 +146,16 @@ export default function HomeCatalog() {
                     />
                   </div>
                 </Link>
-                <div className="p-3">
+                <div className="flex flex-1 flex-col p-3">
                   <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">{product.category || "Tekstil"}</p>
-                  <Link href={detailHref} className="mb-3 block text-sm font-semibold text-stone-900 hover:underline">
+                  <Link href={detailHref} className="mb-3 block min-h-[3.5rem] text-sm font-semibold text-stone-900 hover:underline">
                     {productName}
                   </Link>
                   <a
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex w-full items-center justify-center rounded-md border border-green-600 px-2 py-2 text-xs font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
+                    className="mt-auto inline-flex w-full items-center justify-center rounded-md border border-green-600 px-2 py-2 text-xs font-semibold text-green-700 transition hover:bg-green-600 hover:text-white"
                   >
                     Teklif Al
                   </a>
