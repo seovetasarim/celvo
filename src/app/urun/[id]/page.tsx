@@ -91,8 +91,9 @@ export default function ProductDetailPage() {
           list.find((item) => String(item.id) === String(Number(productId)));
         setProduct(found ?? null);
         const firstImage =
+          (Array.isArray(found?.images) && found.images.length > 0 ? String(found.images[0]) : "") ||
           found?.image ||
-          (Array.isArray(found?.images) && found.images.length > 0 ? found.images[0] : "");
+          "";
         setActiveImage(firstImage || "");
       })
       .catch(() => {
@@ -113,9 +114,11 @@ export default function ProductDetailPage() {
   const productName = product?.name || "Ürün";
   const productImages = useMemo(() => {
     if (!product) return [];
-    const fromArray = Array.isArray(product.images) ? product.images : [];
-    const combined = [product.image, ...fromArray].filter(Boolean).map((img) => String(img));
-    return Array.from(new Set(combined));
+    const fromArray = Array.isArray(product.images)
+      ? product.images.map((img) => String(img ?? "")).filter(Boolean)
+      : [];
+    if (fromArray.length > 0) return fromArray;
+    return product.image ? [String(product.image)] : [];
   }, [product]);
   const whatsappUrl = whatsappHref(
     `Merhaba, ${productName} ürünü hakkında detaylı bilgi ve fiyat teklifi almak istiyorum.`,
