@@ -29,6 +29,7 @@ export async function loadUrun1To12FromPublic(): Promise<CatalogProduct[]> {
       products.push({
         id: `urun-${n}`,
         image: `/${encodeURIComponent(found)}`,
+        images: [`/${encodeURIComponent(found)}`],
         name: `Koleksiyon ${n}`,
         category: "CELVO Woman",
       });
@@ -79,6 +80,7 @@ export async function loadCatalogFromPublicFolder(): Promise<CatalogProduct[]> {
   return productFiles.map((item, index) => ({
     id: `dosya-${index + 1}`,
     image: item.imagePath,
+    images: [item.imagePath],
     name: `Ürün ${index + 1}`,
     category: "Koleksiyon",
   }));
@@ -95,8 +97,12 @@ export async function loadCatalogFromJsonFile(): Promise<CatalogProduct[]> {
     return list.map((p, i) => ({
       id: p.id != null ? p.id : i + 1,
       image: String(p.image ?? ""),
+      images: Array.isArray((p as CatalogProduct).images)
+        ? (p as CatalogProduct).images?.map((img) => String(img ?? "")).filter(Boolean)
+        : [String(p.image ?? "")].filter(Boolean),
       name: String(p.name ?? `Ürün ${i + 1}`),
       category: String(p.category ?? "Tekstil"),
+      description: String((p as CatalogProduct).description ?? ""),
     }));
   } catch {
     return [];

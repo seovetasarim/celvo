@@ -27,6 +27,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -47,7 +54,7 @@ export default function Header() {
               className="relative h-12 w-auto"
             >
               <Image
-                src="/celvo.png"
+                src="/cs-Photoroom.png"
                 alt="Celvo"
                 width={120}
                 height={48}
@@ -129,31 +136,43 @@ export default function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 top-[72px] bg-black/35 backdrop-blur-sm md:hidden"
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] md:hidden"
               onClick={() => setOpen(false)}
             />
 
-            {/* Menu Content */}
+            {/* Right Drawer */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="absolute left-0 right-0 top-full mx-4 mt-4 overflow-hidden rounded-3xl border border-stone-300 bg-white/95 shadow-2xl backdrop-blur-xl md:hidden"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed right-0 top-0 z-[60] flex h-dvh w-[86%] max-w-sm flex-col border-l border-stone-300 bg-white shadow-2xl md:hidden"
             >
-              <div className="p-6">
-                <nav className="flex flex-col gap-2">
+              <div className="flex items-center justify-between border-b border-stone-200 px-5 py-5">
+                <span className="text-sm font-semibold tracking-wide text-stone-700">MENÜ</span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-300 bg-white text-stone-700"
+                  aria-label="Menüyü kapat"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-5">
+                <nav className="flex flex-col gap-2.5">
                   {navItems.map((item, i) => (
                     <motion.div
                       key={item.href}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
+                      transition={{ delay: i * 0.06 }}
                     >
                       <Link
                         href={item.href}
-                        className="group flex items-center justify-between rounded-2xl bg-stone-100 px-5 py-4 text-base font-medium text-stone-700 transition-all hover:bg-stone-200 hover:text-stone-950"
+                        className="group flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-4 py-3.5 text-base font-medium text-stone-700 transition-all hover:bg-stone-100 hover:text-stone-950"
                         onClick={() => setOpen(false)}
                       >
                         <span>{item.label}</span>
@@ -162,6 +181,14 @@ export default function Header() {
                     </motion.div>
                   ))}
                 </nav>
+
+                <a
+                  href="tel:+905067000827"
+                  onClick={() => setOpen(false)}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[#d4af37]/25"
+                >
+                  İletişim
+                </a>
               </div>
             </motion.div>
           </>

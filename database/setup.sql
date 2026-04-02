@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS products (
   image_path VARCHAR(500) NOT NULL,
   name VARCHAR(255) NOT NULL,
   category VARCHAR(100),
+  description TEXT,
   sort_order INT DEFAULT 0,
   is_active TINYINT(1) DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -94,6 +95,25 @@ CREATE TABLE IF NOT EXISTS products (
 INSERT INTO products (image_path, name, category, sort_order)
 SELECT '/images/demo.jpg', 'Premium Koleksiyon', 'Tekstil', 1
 WHERE NOT EXISTS (SELECT 1 FROM products LIMIT 1);
+
+-- 4b. Product Images Table (Ürün Galeri Resimleri)
+CREATE TABLE IF NOT EXISTS product_images (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  product_id INT NOT NULL,
+  image_path LONGTEXT NOT NULL,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_product_images_product
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- Initial gallery image mirrors primary image
+INSERT INTO product_images (product_id, image_path, sort_order)
+SELECT p.id, p.image_path, 1
+FROM products p
+WHERE NOT EXISTS (
+  SELECT 1 FROM product_images pi WHERE pi.product_id = p.id
+);
 
 -- 5. Contact Info Table (İletişim Bilgileri)
 CREATE TABLE IF NOT EXISTS contact_info (
@@ -178,5 +198,6 @@ WHERE NOT EXISTS (SELECT 1 FROM hero_images LIMIT 1);
 
 -- Indexes for performance
 CREATE INDEX idx_products_active ON products(is_active, sort_order);
+CREATE INDEX idx_product_images_product ON product_images(product_id, sort_order);
 CREATE INDEX idx_hero_images_active ON hero_images(is_active, sort_order);
 CREATE INDEX idx_core_values_order ON core_values(sort_order);

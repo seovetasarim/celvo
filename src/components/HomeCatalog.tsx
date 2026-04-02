@@ -71,38 +71,38 @@ export default function HomeCatalog() {
     <section className="w-full pt-24 pb-16">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
         <div className="mb-12 overflow-hidden rounded-2xl border border-stone-300">
-          <div className="relative aspect-[21/8] w-full bg-stone-100">
+          <div className="relative aspect-[16/10] w-full bg-stone-100 sm:aspect-[21/8]">
             <img
               src={HERO_IMAGE_URL}
               alt="Celvo Hero Banner"
               className="h-full w-full object-cover"
               loading="eager"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/10" />
-            <div className="absolute inset-0 flex items-end p-4 sm:p-6 md:p-8">
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20 sm:from-black/65 sm:via-black/40 sm:to-black/10" />
+            <div className="absolute inset-0 flex items-end p-2.5 sm:p-6 md:p-8">
               <div className="max-w-xl text-white">
-                <p className="mb-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/80 sm:text-xs">
+                <p className="mb-1 text-[9px] font-medium uppercase tracking-[0.16em] text-white/80 sm:text-xs sm:tracking-[0.2em]">
                   {hero.badge}
                 </p>
-                <h1 className="text-lg font-semibold leading-tight sm:text-2xl md:text-4xl">
+                <h1 className="text-[28px] font-semibold leading-tight sm:text-2xl md:text-4xl">
                   {hero.title}
                 </h1>
-                <p className="mt-2 max-w-md text-[11px] text-white/85 sm:text-sm md:text-base">
+                <p className="mt-1.5 line-clamp-3 max-w-md text-[10px] leading-snug text-white/90 sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-normal md:text-base">
                   {hero.description}
                 </p>
-                <p className="mt-1 text-[11px] font-medium italic text-white/90 sm:text-sm">
+                <p className="mt-1 text-[10px] font-medium italic text-white/90 sm:text-sm">
                   Rise in Silence.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
                   <Link
                     href="/koleksiyon"
-                    className="inline-flex items-center justify-center rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold text-stone-900 transition hover:bg-stone-100 sm:px-4 sm:py-2 sm:text-sm"
+                    className="inline-flex items-center justify-center rounded-md bg-white px-3 py-1.5 text-[10px] font-semibold text-stone-900 transition hover:bg-stone-100 sm:px-4 sm:py-2 sm:text-sm"
                   >
                     Koleksiyonu Keşfet
                   </Link>
                   <Link
                     href="/hakkimizda#uretim-gucumuz"
-                    className="inline-flex items-center justify-center rounded-md bg-green-600 px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-green-700 sm:px-4 sm:py-2 sm:text-sm"
+                    className="inline-flex items-center justify-center rounded-md bg-green-600 px-3 py-1.5 text-[10px] font-semibold text-white transition hover:bg-green-700 sm:px-4 sm:py-2 sm:text-sm"
                   >
                     Üretim Gücümüzü Tanıyın
                   </Link>
@@ -130,22 +130,27 @@ export default function HomeCatalog() {
             const whatsappUrl = whatsappHref(
               `Merhaba, ${productName} ürünü için fiyat teklifi almak istiyorum.`,
             );
+            const detailHref = `/urun/${encodeURIComponent(String(product.id))}`;
 
             return (
               <article key={product.id} className="overflow-hidden rounded-xl border border-stone-300">
-                <div className="relative aspect-[4/5] w-full bg-stone-100">
-                  <Image
-                    src={product.image || "/images/demo.jpg"}
-                    alt={productName}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    unoptimized={String(product.image || "").startsWith("data:")}
-                  />
-                </div>
+                <Link href={detailHref} className="block">
+                  <div className="relative aspect-[4/5] w-full bg-stone-100">
+                    <Image
+                      src={product.image || "/images/demo.jpg"}
+                      alt={productName}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      unoptimized={String(product.image || "").startsWith("data:")}
+                    />
+                  </div>
+                </Link>
                 <div className="p-3">
                   <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">{product.category || "Tekstil"}</p>
-                  <h3 className="mb-3 text-sm font-semibold text-stone-900">{productName}</h3>
+                  <Link href={detailHref} className="mb-3 block text-sm font-semibold text-stone-900 hover:underline">
+                    {productName}
+                  </Link>
                   <a
                     href={whatsappUrl}
                     target="_blank"

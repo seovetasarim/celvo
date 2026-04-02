@@ -17,6 +17,34 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
+type DashboardProduct = {
+  id: number;
+  image: string;
+  images?: string[];
+  name: string;
+  category: string;
+  description?: string;
+};
+
+const PRODUCT_DESCRIPTION_MAX = 1200;
+
+function normalizeProducts(products: any[]): DashboardProduct[] {
+  return (Array.isArray(products) ? products : []).map((p: any, index: number) => {
+    const image = String(p?.image ?? "");
+    const images = Array.isArray(p?.images)
+      ? p.images.map((img: unknown) => String(img ?? "")).filter(Boolean)
+      : [image].filter(Boolean);
+    return {
+      id: Number(p?.id ?? index + 1),
+      image: image || images[0] || "",
+      images,
+      name: String(p?.name ?? `Ürün ${index + 1}`),
+      category: String(p?.category ?? "Tekstil"),
+      description: String(p?.description ?? ""),
+    };
+  });
+}
+
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"hero" | "about" | "products" | "images" | "contact" | "settings">("hero");
   const [heroData, setHeroData] = useState<any>(null);
@@ -47,7 +75,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
       setHeroData(await heroRes.json());
       setAboutData(await aboutRes.json());
-      setProductsData(await productsRes.json());
+      const rawProductsData = await productsRes.json();
+      setProductsData({
+        ...rawProductsData,
+        products: normalizeProducts(rawProductsData?.products || []),
+      });
       setContactData(await contactRes.json());
       setSettingsData(await settingsRes.json());
     } catch (error) {
@@ -59,7 +91,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     try {
       const response = await fetch("/api/admin/get-content?type=products");
       const data = await response.json();
-      const imageList = data.products.map((p: any) => p.image);
+      const imageList = normalizeProducts(data?.products || []).flatMap((p) => p.images || [p.image]).filter(Boolean);
       setImages(imageList);
     } catch (error) {
       console.error("Failed to load images:", error);
@@ -173,6 +205,59 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     } catch (error) {
       console.error("Delete error:", error);
       setMessage("❌ Silme işlemi başarısız oldu");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadImagesToProduct = async (productId: number, files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setLoading(true);
+    setMessage("");
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("productId", String(productId));
+
+        const response = await fetch("/api/admin/upload-image", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) {
+          const err = await response.json().catch(() => null);
+          throw new Error(err?.error || "Resim yüklenemedi");
+        }
+      }
+      setMessage("✅ Ürün görselleri yüklendi");
+      await loadContent();
+      await loadImages();
+    } catch (error) {
+      setMessage("❌ Yükleme hatası: " + (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteProductImage = async (productId: number, imagePath: string) => {
+    if (!confirm("Bu görseli silmek istediğinize emin misiniz?")) return;
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/delete-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, imagePath }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => null);
+        throw new Error(err?.error || "Görsel silinemedi");
+      }
+      setMessage("✅ Görsel silindi");
+      await loadContent();
+      await loadImages();
+    } catch (error) {
+      setMessage("❌ Silme hatası: " + (error as Error).message);
     } finally {
       setLoading(false);
     }
@@ -621,11 +706,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 Ürün Yönetimi
               </h2>
               <p className="text-sm text-stone-600">
-                Buradaki değişiklikler anasayfadaki ürün kartlarına direkt yansır. Resim, ürün ismi (başlık) ve kategoriyi düzenleyip kaydedin.
+                Buradaki değişiklikler anasayfadaki ürün kartlarına direkt yansır. Resim, ürün ismi, kategori ve ürün detay açıklamasını düzenleyip kaydedin.
               </p>
 
               <div className="space-y-4">
-                {productsData.products.map((product: any, index: number) => (
+                {productsData.products.map((product: DashboardProduct, index: number) => (
                   <div
                     key={product.id}
                     className="rounded-xl border border-white/10 bg-black/40 p-4"
@@ -673,9 +758,60 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         onChange={(e) => {
                           const updated = { ...productsData };
                           updated.products[index].image = e.target.value;
+                          const currentImages = Array.isArray(updated.products[index].images)
+                            ? updated.products[index].images
+                            : [];
+                          updated.products[index].images =
+                            currentImages.length > 0
+                              ? [e.target.value, ...currentImages.slice(1)]
+                              : [e.target.value];
                           setProductsData(updated);
                         }}
                         className="w-full rounded-lg border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-[#d4af37]/50"
+                      />
+                    </div>
+                    <div className="mt-4">
+                      <label className="mb-2 block text-xs text-gray-400">Ürün Detay Açıklaması</label>
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = { ...productsData };
+                            const current = String(updated.products[index].description || "");
+                            updated.products[index].description = `${current}${current ? " " : ""}**kalın metin**`;
+                            setProductsData(updated);
+                          }}
+                          className="rounded-md border border-stone-300 px-2 py-1 text-xs font-medium text-stone-700 hover:bg-stone-100"
+                        >
+                          Kalın
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = { ...productsData };
+                            const current = String(updated.products[index].description || "");
+                            const prefix = current && !current.endsWith("\n") ? "\n" : "";
+                            updated.products[index].description = `${current}${prefix}- madde 1\n- madde 2`;
+                            setProductsData(updated);
+                          }}
+                          className="rounded-md border border-stone-300 px-2 py-1 text-xs font-medium text-stone-700 hover:bg-stone-100"
+                        >
+                          Liste
+                        </button>
+                        <span className="ml-auto text-[11px] text-stone-500">
+                          {String(product.description || "").length}/{PRODUCT_DESCRIPTION_MAX}
+                        </span>
+                      </div>
+                      <textarea
+                        value={product.description || ""}
+                        onChange={(e) => {
+                          const updated = { ...productsData };
+                          updated.products[index].description = e.target.value.slice(0, PRODUCT_DESCRIPTION_MAX);
+                          setProductsData(updated);
+                        }}
+                        rows={3}
+                        className="w-full resize-none rounded-lg border border-white/10 bg-black/60 px-3 py-2 text-sm text-white outline-none focus:border-[#d4af37]/50"
+                        placeholder="Ürün detay sayfasında görünecek açıklama... (Kalın için **metin**, liste için satır başına - kullan)"
                       />
                     </div>
 
@@ -702,6 +838,38 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <Trash2 className="h-4 w-4" />
                         {loading ? "Siliniyor..." : "Sil"}
                       </button>
+                    </div>
+
+                    <div className="mt-4 rounded-lg border border-stone-300/30 p-3">
+                      <p className="mb-2 text-xs font-medium text-stone-500">Ek Ürün Görselleri (Birden fazla yükleyebilirsin)</p>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => {
+                          uploadImagesToProduct(product.id, e.target.files);
+                          e.target.value = "";
+                        }}
+                        className="mb-3 block w-full text-xs text-gray-400 file:mr-4 file:rounded-full file:border-0 file:bg-[#d4af37] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-black hover:file:bg-[#f0d882]"
+                      />
+                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+                        {(product.images || [product.image]).filter(Boolean).map((img, imgIndex) => (
+                          <div key={`${product.id}-${imgIndex}`} className="relative overflow-hidden rounded-md border border-stone-300/40">
+                            <div className="relative aspect-square">
+                              <Image src={img} alt={`${product.name} ${imgIndex + 1}`} fill className="object-cover" />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => deleteProductImage(product.id, img)}
+                              disabled={loading}
+                              className="absolute right-1 top-1 rounded-full bg-red-600 p-1 text-white hover:bg-red-700 disabled:opacity-50"
+                              title="Görseli sil"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -8,8 +8,12 @@ async function saveProductsToJson(products: any[]) {
   const normalized = products.map((p, index) => ({
     id: p.id ?? index + 1,
     image: String(p.image ?? ""),
+    images: Array.isArray(p.images)
+      ? p.images.map((img: unknown) => String(img ?? "")).filter(Boolean)
+      : [String(p.image ?? "")].filter(Boolean),
     name: String(p.name ?? `Ürün ${index + 1}`),
     category: String(p.category ?? "Tekstil"),
+    description: String(p.description ?? ""),
   }));
   await fs.writeFile(filePath, JSON.stringify({ products: normalized }, null, 2), "utf-8");
 }
@@ -50,11 +54,35 @@ export async function POST(request: Request) {
         const connection = await pool.getConnection();
         try {
           await connection.query("DELETE FROM products");
+          try {
+            await connection.query("DELETE FROM product_images");
+          } catch {
+            // product_images tablosu olmayabilir
+          }
+
           for (let i = 0; i < data.products.length; i++) {
-            await connection.query(
-              `INSERT INTO products (image_path, name, category, sort_order, is_active) VALUES (?, ?, ?, ?, 1)`,
-              [data.products[i].image, data.products[i].name, data.products[i].category, i + 1]
+            const product = data.products[i] ?? {};
+            const primaryImage = String(product.image ?? "");
+            const [insertResult] = await connection.query(
+              `INSERT INTO products (image_path, name, category, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?, 1)`,
+              [primaryImage, product.name, product.category, String(product.description ?? ""), i + 1]
             );
+            const productId = (insertResult as any).insertId as number;
+
+            const images = Array.isArray(product.images)
+              ? product.images.map((img: unknown) => String(img ?? "")).filter(Boolean)
+              : [primaryImage].filter(Boolean);
+
+            try {
+              for (let j = 0; j < images.length; j++) {
+                await connection.query(
+                  `INSERT INTO product_images (product_id, image_path, sort_order) VALUES (?, ?, ?)`,
+                  [productId, images[j], j + 1]
+                );
+              }
+            } catch {
+              // product_images tablosu olmayan ortamlarda ürün kapak resmiyle devam
+            }
           }
           return NextResponse.json({ success: true, message: "Ürünler veritabanına kaydedildi" });
         } finally {

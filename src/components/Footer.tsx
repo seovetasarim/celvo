@@ -48,7 +48,7 @@ export default function Footer() {
               className="relative mx-auto"
             >
               <Image
-                src="/celvo.png"
+                src="/cs-Photoroom.png"
                 alt="Celvo"
                 width={180}
                 height={72}
@@ -126,24 +126,22 @@ export default function Footer() {
           </motion.a>
         </div>
 
-        <div className="mb-12 flex flex-wrap items-center justify-center gap-4">
+        <div className="mb-12 grid w-full grid-cols-3 items-center gap-2 text-center">
           <Link
             href="/hakkimizda"
-            className="rounded-lg px-4 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
+            className="rounded-lg px-2 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
           >
             Hakkımızda
           </Link>
-          <span className="text-stone-300">•</span>
           <Link
             href="/koleksiyon"
-            className="rounded-lg px-4 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
+            className="rounded-lg px-2 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
           >
             Koleksiyon
           </Link>
-          <span className="text-stone-300">•</span>
           <Link
             href="/iletisim"
-            className="rounded-lg px-4 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
+            className="rounded-lg px-2 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#b08a20]"
           >
             İletişim
           </Link>
@@ -151,15 +149,15 @@ export default function Footer() {
 
         <div className="mb-8 h-px w-full bg-stone-200" />
 
-        <div className="flex items-center justify-between gap-4 text-sm text-stone-500">
-          <p className="whitespace-nowrap text-left">
+        <div className="flex flex-col items-center justify-center gap-3 text-sm text-stone-500 sm:flex-row sm:justify-between">
+          <p className="text-center leading-relaxed sm:text-left">
             © {new Date().getFullYear()}{" "}
             <span className="font-semibold text-stone-700">CÉLVO</span> - Yusuf Tutar
             <span className="mx-2">•</span>
             Tüm hakları saklıdır.
           </p>
 
-          <div className="flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-stone-500">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-center text-xs text-stone-500 sm:justify-end">
             <span>Designed & Developed by</span>
             <a
               href="https://www.webtasarimseo.com"
