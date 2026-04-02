@@ -45,6 +45,18 @@ function normalizeProducts(products: any[]): DashboardProduct[] {
   });
 }
 
+function getSlimProductsPayload(products: DashboardProduct[]) {
+  return {
+    products: (Array.isArray(products) ? products : []).map((p, index) => ({
+      id: Number(p.id),
+      name: String(p.name ?? `Ürün ${index + 1}`),
+      category: String(p.category ?? "Tekstil"),
+      description: String(p.description ?? ""),
+      sortOrder: index + 1,
+    })),
+  };
+}
+
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<"hero" | "about" | "products" | "images" | "contact" | "settings">("hero");
   const [heroData, setHeroData] = useState<any>(null);
@@ -876,7 +888,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               </div>
 
               <button
-                onClick={() => saveContent("products", productsData)}
+                onClick={() =>
+                  saveContent("products", getSlimProductsPayload(productsData.products as DashboardProduct[]))
+                }
                 disabled={loading}
                 className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f0d882] px-8 py-4 font-semibold text-black transition-all hover:scale-105 disabled:opacity-50"
               >

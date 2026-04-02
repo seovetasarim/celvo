@@ -53,37 +53,31 @@ export async function POST(request: Request) {
       try {
         const connection = await pool.getConnection();
         try {
-          await connection.query("DELETE FROM products");
-          try {
-            await connection.query("DELETE FROM product_images");
-          } catch {
-            // product_images tablosu olmayabilir
-          }
+          const products = Array.isArray(data.products) ? data.products : [];
 
-          for (let i = 0; i < data.products.length; i++) {
-            const product = data.products[i] ?? {};
-            const primaryImage = String(product.image ?? "");
-            const [insertResult] = await connection.query(
-              `INSERT INTO products (image_path, name, category, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?, 1)`,
-              [primaryImage, product.name, product.category, String(product.description ?? ""), i + 1]
+          // Large base64 payloads cause HTTP 413 in production. For admin edits we
+          // update only textual product metadata and keep images as-is.
+          for (let i = 0; i < products.length; i++) {
+            const product = products[i] ?? {};
+            const id = Number(product.id);
+            const sortOrder = Number(product.sortOrder ?? i + 1);
+
+            if (!Number.isFinite(id)) continue;
+
+            await connection.query(
+              `UPDATE products
+               SET name = ?, category = ?, description = ?, sort_order = ?
+               WHERE id = ?`,
+              [
+                String(product.name ?? `Ürün ${i + 1}`),
+                String(product.category ?? "Tekstil"),
+                String(product.description ?? ""),
+                Number.isFinite(sortOrder) ? sortOrder : i + 1,
+                id,
+              ]
             );
-            const productId = (insertResult as any).insertId as number;
-
-            const images = Array.isArray(product.images)
-              ? product.images.map((img: unknown) => String(img ?? "")).filter(Boolean)
-              : [primaryImage].filter(Boolean);
-
-            try {
-              for (let j = 0; j < images.length; j++) {
-                await connection.query(
-                  `INSERT INTO product_images (product_id, image_path, sort_order) VALUES (?, ?, ?)`,
-                  [productId, images[j], j + 1]
-                );
-              }
-            } catch {
-              // product_images tablosu olmayan ortamlarda ürün kapak resmiyle devam
-            }
           }
+
           return NextResponse.json({ success: true, message: "Ürünler veritabanına kaydedildi" });
         } finally {
           connection.release();
