@@ -6,9 +6,17 @@ export const alt = "CELVO | Bayan Giyim Üretimi & Tasarım";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+async function loadLogo(): Promise<string | null> {
+  try {
+    const data = await readFile(join(process.cwd(), "public/cs-Photoroom.png"));
+    return `data:image/png;base64,${data.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
 export default async function OpengraphImage() {
-  const logoData = await readFile(join(process.cwd(), "public/cs-Photoroom.png"));
-  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+  const logoSrc = await loadLogo();
 
   return new ImageResponse(
     (
@@ -59,14 +67,29 @@ export default async function OpengraphImage() {
           }}
         />
 
-        {/* Logo */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={logoSrc}
-          alt="Celvo"
-          width={620}
-          style={{ objectFit: "contain", marginBottom: 28 }}
-        />
+        {/* Logo (image if available, otherwise styled wordmark) */}
+        {logoSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={logoSrc}
+            alt="Celvo"
+            width={620}
+            style={{ objectFit: "contain", marginBottom: 28 }}
+          />
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              fontSize: 150,
+              fontWeight: 700,
+              letterSpacing: 6,
+              color: "#d4af37",
+              marginBottom: 28,
+            }}
+          >
+            CELVO
+          </div>
+        )}
 
         {/* Tagline */}
         <div
