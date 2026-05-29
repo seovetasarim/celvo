@@ -50,6 +50,13 @@ export async function GET() {
       }
     }
     const e = error as { code?: string; errno?: number; message?: string };
+    const hint =
+      port === 2083 || port === 2082
+        ? "DB_PORT 2083/2082 cPanel HTTPS portudur. MySQL için Vercel'de DB_PORT=3306 yapın."
+        : e.code === "ECONNREFUSED"
+          ? "3306 kapalı: cPanel → Remote MySQL → Access Hosts'a % ekleyin; hosting firmasından uzak MySQL açtırın."
+          : undefined;
+
     return NextResponse.json(
       {
         success: false,
@@ -59,6 +66,7 @@ export async function GET() {
           errno: e.errno,
           message: e.message,
         },
+        hint,
         env,
       },
       { status: 500 }

@@ -6,6 +6,7 @@ import {
   loadCatalogFromPublicFolder,
   loadUrun1To12FromPublic,
 } from "@/lib/catalogFallback";
+import { useCatalogFallback } from "@/lib/useCatalogFallback";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -36,14 +37,14 @@ export async function GET(request: Request) {
       console.error("DB Error (products):", error);
     }
 
-    if (products.length === 0) {
+    if (products.length === 0 && useCatalogFallback()) {
       products = await loadCatalogFromJsonFile();
-    }
-    if (products.length === 0) {
-      products = await loadUrun1To12FromPublic();
-    }
-    if (products.length === 0) {
-      products = await loadCatalogFromPublicFolder();
+      if (products.length === 0) {
+        products = await loadUrun1To12FromPublic();
+      }
+      if (products.length === 0) {
+        products = await loadCatalogFromPublicFolder();
+      }
     }
 
     return NextResponse.json({ products });

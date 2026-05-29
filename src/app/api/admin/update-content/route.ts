@@ -91,7 +91,7 @@ export async function POST(request: Request) {
           return NextResponse.json(
             {
               error:
-                "Canli ortamda veritabanina baglanilamadigi icin kayit yapilamadi. Vercel DB_ degiskenleri, DB_SSL ve MySQL Remote Access izinlerini kontrol edin. Teknik detay: " +
+                "Canlı ortamda veritabanına bağlanılamadı. Vercel → Settings → Environment Variables: DB_HOST=104.247.173.212, DB_USER=celvocom_ilen, DB_NAME=celvocom_celvo, DB_PORT=3306 (2083 cPanel portudur, MySQL değil), DB_SSL=true. cPanel → Remote MySQL → Access Hosts: %. Teknik detay: " +
                 dbMessage,
             },
             { status: 500 }
