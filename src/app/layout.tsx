@@ -42,10 +42,6 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  icons: {
-    icon: "/images/logo.png",
-    apple: "/images/logo.png",
-  },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
@@ -53,20 +49,11 @@ export const metadata: Metadata = {
     locale: "tr_TR",
     url: siteUrl,
     siteName: "Celvo",
-    images: [
-      {
-        url: "/logo.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Celvo - Premium Tekstil",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/logo.jpg"],
   },
   robots: {
     index: true,
