@@ -49,11 +49,20 @@ export const metadata: Metadata = {
     locale: "tr_TR",
     url: siteUrl,
     siteName: "Celvo",
+    images: [
+      {
+        url: "/celvo.png",
+        width: 805,
+        height: 463,
+        alt: "Celvo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
+    images: ["/celvo.png"],
   },
   robots: {
     index: true,
